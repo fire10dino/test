@@ -1,18 +1,17 @@
 import streamlit as st
-from openai import OpenAI
+from groq import Groq
 
-# Page settings
 st.set_page_config(
     page_title="My AI",
     page_icon="🤖"
 )
 
 st.title("🤖 My AI")
-st.caption("Powered by OpenAI")
+st.caption("Powered by Groq")
 
-# Connect to OpenAI
-client = OpenAI(
-    api_key=st.secrets["OPENAI_API_KEY"]
+# Connect to Groq
+client = Groq(
+    api_key=st.secrets["GROQ_API_KEY"]
 )
 
 # Create chat history
@@ -24,7 +23,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Get user's message
+# Get user input
 if prompt := st.chat_input("What would you like to ask?"):
 
     # Display user message
@@ -37,16 +36,16 @@ if prompt := st.chat_input("What would you like to ask?"):
         "content": prompt
     })
 
-    # Ask OpenAI
+    # Ask Groq
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
 
-            response = client.responses.create(
-                model="gpt-5.6",
-                input=st.session_state.messages
+            response = client.chat.completions.create(
+                model="openai/gpt-oss-20b",
+                messages=st.session_state.messages
             )
 
-            answer = response.output_text
+            answer = response.choices[0].message.content
 
             st.markdown(answer)
 
