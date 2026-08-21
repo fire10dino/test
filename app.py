@@ -10,8 +10,9 @@ st.title("🤖 My AI")
 st.caption("Powered by Groq")
 
 # Connect to Groq
+
 client = Groq(
-    api_key=st.secrets["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"]
+    api_key=st.secrets["GROQ_API_KEY"]
 )
 
 # Create chat history
